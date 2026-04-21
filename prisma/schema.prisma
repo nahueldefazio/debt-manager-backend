@@ -1,0 +1,31 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id       Int      @id @default(autoincrement())
+  email    String   @unique
+  isPro    Boolean  @default(false)
+  debts    Debt[]
+}
+
+model Debt {
+  id          Int      @id @default(autoincrement())
+  description String
+  amount      Float
+  currency    String   @default("USD")
+  debtorPhone String   // Ej: +5491123456789
+  isPaid      Boolean  @default(false)
+  userId             Int
+  user               User     @relation(fields: [userId], references: [id])
+  createdAt          DateTime @default(now())
+  dueDate            DateTime @default(now())
+  currentInstallment Int      @default(1)
+  totalInstallments  Int      @default(1)
+}
