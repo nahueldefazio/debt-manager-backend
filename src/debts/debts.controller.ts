@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Param, UseGuards, Request, ParseIntPipe, P
 import { DebtsService } from './debts.service';
 import { ProLimitGuard } from '../guards/pro-limit.guard';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { CreateDebtDto, UpdateDebtDto } from './dto/debt.dto';
 
 @Controller('debts')
 @UseGuards(JwtAuthGuard)
@@ -15,7 +16,7 @@ export class DebtsController {
 
   @Post()
   @UseGuards(ProLimitGuard)
-  createDebt(@Request() req, @Body() createDebtDto: any) {
+  createDebt(@Request() req, @Body() createDebtDto: CreateDebtDto) {
     return this.debtsService.createDebt(req.user.id, createDebtDto);
   }
 
@@ -26,7 +27,7 @@ export class DebtsController {
   }
 
   @Patch(':id')
-  updateDebt(@Request() req, @Param('id', ParseIntPipe) id: number, @Body() updateDebtDto: any) {
+  updateDebt(@Request() req, @Param('id', ParseIntPipe) id: number, @Body() updateDebtDto: UpdateDebtDto) {
     return this.debtsService.updateDebt(id, req.user.id, updateDebtDto);
   }
 
